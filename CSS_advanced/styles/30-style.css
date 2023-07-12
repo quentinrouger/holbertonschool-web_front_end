@@ -526,7 +526,7 @@ a:active {
 .card-work .card-title a {
     display: block;
     text-decoration: none;
-    padding-top: 50%;
+    padding-top: 45%;
 }
 
 .card-work .card-title a::after {
