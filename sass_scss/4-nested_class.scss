@@ -1,0 +1,11 @@
+/* Task 4 - nested class */
+$normal-text-color: #3D3D3D;
+$red-text-color: #FF0000;
+
+body {
+  color: $normal-text-color;
+
+  .red {
+    color: $red-text-color;
+  }
+}
