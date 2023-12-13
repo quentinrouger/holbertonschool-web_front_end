@@ -1,0 +1,11 @@
+/* Task 6 - nested hover */
+$default-text-color: #FF0000;
+$hover-text-color: #00FF00;
+
+button {
+  color: $default-text-color;
+
+  &:hover {
+    color: $hover-text-color;
+  }
+}
