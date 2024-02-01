@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+    <head>
+
+        <meta charset="utf-8" />
+        <title>Task 7</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    </head>
+
+    <body>
+    </body>
+
+    <script type="application/javascript">
+
+      function createSearchForm() {
+
+          $('body').append('<input type="text">', '<input type="submit">', '<ul>');
+          $('input:submit').on('click', function () {
+            queryWikipedia($('input:text').val()); 
+          });
+      }
+
+      function addNewArticle(id, title, snippet) {
+          $('ul').append(`<li><p><span>${id} - </span><b>${title}</b></p><p>${snippet}</p></li>`);
+      }
+
+      function queryWikipedia(search) {
+          // Create a data object with attributes required to query Wikipedia API
+          const requestData = {
+                action: 'query',
+                list: 'search',
+                srsearch: search,
+                format: 'json',
+                origin: '*'
+            };
+
+            // Use jQuery ajax to query Wikipedia API
+            $.ajax({
+                url: 'https://en.wikipedia.org/w/api.php',
+                data: requestData,
+                dataType: 'jsonp', // Use JSONP for cross-origin requests
+                success: function (data) {
+                    // For each result returned by the API, call addNewArticle function
+                    data.query.search.forEach(function (result) {
+                        addNewArticle(result.pageid, result.title, result.snippet);
+                    });
+                },
+            });
+        }
+
+      createSearchForm();
+
+    </script>
+
+</html>

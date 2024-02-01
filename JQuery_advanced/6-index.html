@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+    <head>
+
+        <meta charset="utf-8" />
+        <title>Task 6</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+
+    </head>
+
+    <body>
+    </body>
+
+    <script type="application/javascript">
+
+      function createFamilyTree() {
+
+          $('body').append('<table>');
+          $('table').append('<thead>', '<tbody>');
+          $('thead').append('<tr>');
+          $('tr').append('<th>', '<th>');
+          $('th').first().text('Firstname');
+          $('th').last().text('Lastname');
+      }
+
+      function addNewMember(firstName, lastName, position) {
+          if (position === 'before') {
+              $('tbody').prepend(`<tr><td>${firstName}</td><td>${lastName}</td><td>(x)</td></tr>`);
+              } else {
+                  $('tbody').append(`<tr><td>${firstName}</td><td>${lastName}</td><td>(x)</td></tr>`);
+              }
+          
+          $("tr td:nth-child(3)").on("click", function () {
+              $(this).parent().remove()
+          })
+
+          $("tr td:nth-child(3)").css('background-color', 'orange')
+      }
+
+      function createForm() {
+          $('table').before('<input type="text" id="firstNameInput" placeholder="First Name">');
+          $('table').before('<input type="text" id="lastNameInput" placeholder="Last Name">');
+
+          // Add a select element with two options before the table
+          $('table').before('<select id="positionSelect"><option value="before">Before</option><option value="after">After</option></select>');
+
+          // Add an input of type submit before the table
+          $('table').before('<input type="submit" value="Submit" id="addMemberButton">');
+
+          // Add click event to the submit button
+          $('#addMemberButton').click(function () {
+              // Call the addNewMember function with input values and selected position
+              addNewMember($("input").first().val(), $("input:nth-of-type(2)").val(), $("select").val());
+            });
+      }
+
+      createFamilyTree();
+      createForm();
+
+    </script>
+
+</html>

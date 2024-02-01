@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+    <head>
+
+        <meta charset="utf-8" />
+        <title>Task 12</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    </head>
+
+    <body>
+    </body>
+
+    <script type="application/javascript">
+
+      // function addPostRow(data) {
+      //     $('body').append(`<p><span>Post created with id ${data.id}, title: ${data.title}, author: ${data.author}</span></p>`);
+      // }
+
+      function addPostRow(data) {
+          const postId = data.id;
+
+          // Append a paragraph with the id attribute
+          $('body').append(`<p id="row-${postId}"><span><a href="#" class="delete" data-postid="${postId}">(delete)</a></span><span>Post created with id ${postId}, title: ${data.title}, author: ${data.author}</span></p>`);
+
+          // Attach a click event to the (delete) link
+          $(`#row-${postId} a.delete`).on('click', function (event) {
+              event.preventDefault();
+              const postIdToDelete = $(this).data('postid');
+              deletePost(postIdToDelete);
+          });
+      }
+
+      function deletePost(id) {
+          // Send a DELETE query to the posts endpoint with the id of the post
+          $.ajax({
+              type: 'DELETE',
+              url: `http://localhost:3000/posts/${id}`, // Update with your server endpoint
+              success: function () {
+                  // If the query is successful, remove the row from the body
+                  $(`#row-${id}`).remove();
+              },
+              error: function () {
+                  // If the query is not successful, display an alert with the message
+                  alert('Post was not deleted');
+              }
+          });
+      }
+
+
+      function listPosts() {
+        $.ajax({
+          url: 'http://localhost:3000/posts',
+          method: 'GET',
+          success: function (response) {
+
+            response.reverse();
+            response.forEach(function (post) {
+              addPostRow(post);
+            });
+          },
+          error: function () {
+            alert('Server Error');
+          }
+        });
+      }
+
+      function buildForm() {
+          $('body').append(`
+          <form>
+            <div>
+              <label for="author">Author</label>
+              <input type="text" id="author"></input>
+            </div>
+            <div>
+              <label for="title">Title</label>
+              <textarea type="text" id="title"></textarea>
+            </div>
+            <input type="submit"></input>
+          </form>`)
+
+          $('form').on('submit', function (event) {
+            event.preventDefault();
+            sendForm()
+          })
+      }
+
+      function sendForm() {
+          $('form').after('<p>About to send the query to the API</p>');
+
+          const dataobject = {
+            title: $('#title').val(),
+            author: $('#author').val(),
+          }
+
+          // Send a POST query to the server endpoint 'posts' with the data
+          $.ajax({
+              type: 'POST',
+              url: 'http://localhost:3000/posts', // Update with your server endpoint
+              data: JSON.stringify(dataobject),
+              contentType: 'application/json',
+              success: function(data) {
+                  // If the query succeeds, call addPostRow with the data from the API
+                  addPostRow(data);
+              },
+              error: function() {
+                  // If the query does not succeed, display an alert with the message
+                  alert('Error sending the POST query');
+              }
+          });
+      }
+
+    $(document).ready(function () {
+      listPosts();
+      buildForm();
+    });
+
+    </script>
+
+</html>
