@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Shopping Cart</title>
+</head>
+<body>
+    <script>
+        // Check if local storage is available
+        function isLocalStorageAvailable() {
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // Display alert if local storage is not available
+        if (!isLocalStorageAvailable()) {
+            alert('Sorry, your browser does not support Web storage. Try again with a better one');
+        } else {
+            // Define available items
+            var availableItems = ['Shampoo', 'Soap', 'Sponge', 'Water'];
+
+            // Function to add item to cart
+            function addItemToCart(item) {
+                localStorage.setItem(item, true);
+                displayCart();
+            }
+
+            // Function to create store
+            function createStore() {
+                const ul = document.createElement('ul');
+                document.body.appendChild(ul);
+
+                availableItems.forEach(function(item) {
+                    var li = document.createElement('li');
+                    li.textContent = item;
+                    li.onclick = function() {
+                        addItemToCart(item);
+                    };
+                    ul.appendChild(li);
+                });
+            }
+
+            // Function to display cart
+            function displayCart() {
+                var cartCount = 0;
+                for (var i = 0; i < localStorage.length; i++) {
+                    var key = localStorage.key(i);
+                    if (localStorage.getItem(key) === 'true') {
+                        cartCount++;
+                    }
+                }
+                var itemWord = cartCount === 1 ? 'item' : 'items';
+                var message = cartCount > 0 ? `You previously had ${cartCount} ${itemWord} in your cart` : '';
+                var p = document.createElement('p');
+                p.textContent = message;
+                document.body.appendChild(p);
+            }
+
+            // Call function to create store and display cart
+            createStore();
+            displayCart();
+        }
+    </script>
+</body>
+</html>
